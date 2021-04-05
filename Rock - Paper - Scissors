@@ -1,0 +1,74 @@
+import java.util.Scanner;
+
+
+public class RPS2 {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+// sets up scanner to receive player input
+
+        String computerChose = computerChoice();
+
+        System.out.println("Lets play rock, paper, scissors.");
+        System.out.println("When i say 'shoot', Choose: rock, paper, or scissors.");
+        System.out.println("Are you ready? Write 'yes' if you are.");
+        String ready = scan.nextLine();
+// explains the game, collects 'ready or not'  question
+        if (ready.equals("yes")) {
+            System.out.println("\nGreat! \n rock - paper - scissors, shoot!");
+        }   else {
+            System.out.println("\nInvalid option");
+            System.exit(0);
+        }
+// instructs computer to either continue running game or to end it based on player input
+        String yourChoice = scan.nextLine();
+        if (yourChoice.equals("rock") || yourChoice.equals("paper") || yourChoice.equals("scissors")) {
+            System.out.println("You chose: " + yourChoice);
+            System.out.println("Computer chose: " + computerChose);
+            System.out.println("The results are in! " + result(yourChoice, computerChose));
+            System.exit(0);
+        } else {
+            System.out.println("Invalid Option");
+        }
+        scan.close();
+    }    
+// prompts computer to check players input for a valid choice
+    
+
+        public static String computerChoice() {
+        double randomNumber = Math.random() * 3;
+        int integer = (int) randomNumber;
+
+         switch (integer) {
+             case 0: return "rock";
+             case 1: return "paper";
+             case 2: return "scissors";
+             default: return "";  //default case not possible.
+// tells computer to find a random number between 0 - 3, link number to a choice
+       }
+
+    }
+
+        public static String result(String yourChoice, String computerChoice) {
+            String result = "";
+            
+            if (yourChoice.equals("rock") && computerChoice.equals("scissors")) {
+                result = "You win!";
+            } else if (yourChoice.equals("rock") && computerChoice.equals("paper")) {
+                result = "You lose!";
+            } else if (yourChoice.equals("paper") && computerChoice.equals("rock")) {
+                result = "You win!";
+            } else if (yourChoice.equals("paper") && computerChoice.equals("scissors")) {
+                result = "You lose!";
+            } else if (yourChoice.equals("scissors") && computerChoice.equals("paper")) {
+                result = "You win!";
+            }   else if (yourChoice.equals("scissors") && computerChoice.equals("rock")) {
+                result = "You lose!";
+            }  else if (yourChoice.equals(computerChoice)) {
+                result = "It's a tie!";
+            }  
+            return result;
+          }
+
+
+
+}
