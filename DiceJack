@@ -1,0 +1,50 @@
+import java.util.Scanner;
+
+public class DiceJack {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+    int roll1 = rollDice();
+    int roll2 = rollDice();
+    int roll3 = rollDice();
+
+    System.out.println("Enter three numbers between 1 and 6");
+    int answer1 = scan.nextInt();
+    int answer2 = scan.nextInt();
+    int answer3 = scan.nextInt();
+
+    if (answer1 < 1 || answer2 < 1 || answer3 < 1) {
+        System.out.println("Invalid option, GAME OVER");
+        System.exit(0);
+    }
+
+    if (answer1 > 6 || answer2 > 6 || answer3 > 6) {
+        System.out.println("Invalid option, GAME OVER");
+        System.exit(0);
+    }
+
+    int sumOfAnswers = answer1 + answer2 + answer3;
+    int sumOfDiceRoll = roll1 + roll2 + roll3;
+    System.out.println("Dice sum: " + sumOfDiceRoll + ". Sum of your choices: " + sumOfAnswers);
+
+   if (checkWin(sumOfDiceRoll, sumOfAnswers)) {
+       System.out.println("Congrats, you win!");
+   }    else {
+       System.out.println("YOU LOSE :D");
+   }
+    scan.close();
+    }
+
+    public static int rollDice() {
+       double randomNumber = Math.random() * 6;
+       randomNumber += 1;
+       return (int)randomNumber;
+    }
+
+    public static boolean checkWin(int sumOfDiceRoll, int sumOfAnswers){
+        return (sumOfAnswers > sumOfDiceRoll && sumOfAnswers - sumOfDiceRoll < 3);
+            
+    }
+
+// hope you enjoyed my game!
+
+}
