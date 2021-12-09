@@ -1,0 +1,155 @@
+import java.util.Scanner; 
+
+public class TicTacToe {
+    
+public static Scanner scan = new Scanner(System.in);        
+
+    public static void main(String[] args) {    
+    char[][] board = {
+        {'_', '_', '_'},
+        {'_', '_', '_'},
+        {'_', '_', '_'}
+        }; //new 2d array, 3 rows 3 columns of 'char' type elements
+     
+
+    System.out.println("Let's play Tic Tac Toe\n"); 
+    System.out.print("Write 'yes' or 'no' ->  ");
+    String yesOrNo = scan.nextLine();               //user choose to start or end game
+    System.out.print("\n");
+    if (!yesOrNo.equals("yes")) {
+        System.exit(0);
+    }                        
+    printBoard(board);                         //print board to begin game
+    
+    for (int i = 0; i < 9; i++){               //9 possible turns in TicTacToe, therefor i loops 9 times
+        if (i % 2 == 0) {                      //if i is even, continue with 'X's turn
+            System.out.println("Turn X: ");
+            int[] spot = askUser(board);       //creates int[] variable to store the return values of the 'askUser' function
+            board[spot[0]][spot[1]] = 'X';     //populates our 'char[][] board' array by passing in the row and column the user chooses
+            printBoard(board);                 //prints updated game board
+            
+        } else {
+            System.out.println("Turn O: ");    //if i is not even, initiate 'O's turn
+            int[] spot = askUser(board);       //int[] variable stores the return values of the 'askUser' function
+            board[spot[0]][spot[1]] = 'O';     //populates game board by passing in the users chosen row and column
+            printBoard(board);                 //prints updated game board
+            
+        }
+        if (checkWin(board) == 3) {
+            System.out.println("\nX wins!!!");
+            System.exit(0);
+        } else if (checkWin(board) == -3) {
+            System.out.println("\nO wins!!!");
+            System.exit(0);
+        } else if (i == 8) {
+            System.out.println("It's a tie!!!");
+        }
+    }
+    scan.close();
+}
+    
+public static int[] askUser(char[][] board) {   //askUser function: prompts user to choose a row and column 
+    System.out.print("\tChoose a row and column: "); 
+    int row = scan.nextInt();
+    int element = scan.nextInt();
+    if (element > 2 || row > 2){
+        System.out.print("\nChoose a row and column: ");
+        row = scan.nextInt();
+        element = scan.nextInt();
+    }
+    while (board[row][element] != '_') {        //while loop to prompt user for a new entry any time a spot is chosen twice
+            System.out.println("That spot is taken");
+            System.out.print("\nChoose a row and column: ");
+            row = scan.nextInt();
+            element = scan.nextInt();
+        }
+    return new int[] {row, element};            //stores given values within a new array
+}
+
+
+
+    public static void printBoard (char[][] board) { //printBoard function, will print the given 2d array
+        System.out.print("\n");
+        for (int i = 0; i < board.length; i++) {     //since 'board' is 2d, we use a nested loop to cover all indexes
+            System.out.print("\t");
+            for (int j = 0; j < board[i].length; j++) { //while j is less than the array at index i
+                System.out.print(board[i][j] + " ");    //print ex. 0 0, 0 1, 0 2 
+            }                                           //          1 0, 1 1, 1 2
+            System.out.print("\n" + "\n");
+        }
+        System.out.print("\n");
+    }
+
+    public static int checkWin (char[][] board) {       //checkWin function loops through 2D array to check for a winner
+        int count = 0;
+
+        for (int i = 0; i < 3; i++) {
+            count = 0;
+             for (int j = 0; j < 3; j++) {           //first for loop loops through every row (horizontal)
+                 if (board[i][j] == 'X') {
+                     count ++;
+                 } else if (board[i][j] == 'O') {
+                     count --;
+                 }  
+             }
+             if (count == 3 || count == -3) {
+                return count;
+            } else {
+                count = 0;
+            }
+         }
+
+         for (int i = 0; i < 3; i++) {
+             for (int j = 0; j < 3; j++) {           //second for loop loops through every column (vertical)
+                 if (board[j][i] == 'X') {
+                     count ++;
+                 } else if (board[j][i] == 'O') {
+                     count --;
+                 }  
+             }
+
+             if (count == 3 || count == -3) {
+                return count;
+            } else {
+                count = 0;
+            }
+         }
+
+         for (int i = 0; i < 3; i++) {              //third for loop checks for a left diagnal win
+            if (board[i][i] == 'X') {
+                count ++;
+            } else if (board[i][i] == 'O') {
+                count --;
+            }   
+        }
+        if (count == 3 || count == -3) {
+            return count;
+        } else {
+            count = 0;
+        }
+        
+        int j = 2;
+        for (int i = 0; i < 3; i++) {               //last for loop checks for a right diagnal win
+            if (board[j][i] == 'X') {
+                count ++;
+            } else if (board[j][i] == 'O') {
+                count --;
+            }
+            j--;
+       }
+       if (count == 3 || count == -3) {
+        return count;
+            } else {
+            count = 0;
+        }
+
+
+
+
+
+        return count;
+    }
+
+}
+
+
