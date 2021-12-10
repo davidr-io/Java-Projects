@@ -1,0 +1,168 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Hangman {
+    public static String[] words = {"ant", "baboon", "badger", "bat", "bear", "beaver", "camel",
+    "cat", "clam", "cobra", "cougar", "coyote", "crow", "deer",
+    "dog", "donkey", "duck", "eagle", "ferret", "fox", "frog", "goat",
+    "goose", "hawk", "lion", "lizard", "llama", "mole", "monkey", "moose",
+    "mouse", "mule", "newt", "otter", "owl", "panda", "parrot", "pigeon", 
+    "python", "rabbit", "ram", "rat", "raven","rhino", "salmon", "seal",
+    "shark", "sheep", "skunk", "sloth", "snake", "spider", "stork", "swan",
+    "tiger", "toad", "trout", "turkey", "turtle", "weasel", "whale", "wolf",
+    "wombat", "zebra"};
+
+    public static String[] gallows = {"+---+\n" +
+    "|   |\n" +
+    "    |\n" +
+    "    |\n" +
+    "    |\n" +
+    "    |\n" +
+    "=========\n",
+
+    "+---+\n" +
+    "|   |\n" +
+    "O   |\n" +
+    "    |\n" +
+    "    |\n" +
+    "    |\n" +
+    "=========\n",
+
+    "+---+\n" +
+    "|   |\n" +
+    "O   |\n" +
+    "|   |\n" +
+    "    |\n" +
+    "    |\n" +
+    "=========\n",
+
+    " +---+\n" +
+    " |   |\n" +
+    " O   |\n" +
+    "/|   |\n" +
+    "     |\n" +
+    "     |\n" +
+    " =========\n",
+
+    " +---+\n" +
+    " |   |\n" +
+    " O   |\n" +
+    "/|\\  |\n" + 
+    "     |\n" +
+    "     |\n" +
+    " =========\n",
+
+    " +---+\n" +
+    " |   |\n" +
+    " O   |\n" +
+    "/|\\  |\n" +
+    "/    |\n" +
+    "     |\n" +
+    " =========\n",
+
+    " +---+\n" +
+    " |   |\n" +
+    " O   |\n" +
+    "/|\\  |\n" + 
+    "/ \\  |\n" +
+    "     |\n" +
+    " =========\n"};
+
+
+    public static void main(String[] args) {
+        String randomWord = randomWord(words);  
+        int gallowIndex = 0;  
+        char[] misses = new char[6];
+        int printMissedCounter = 0;
+    
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Let's play Hangman!\n");
+        System.out.print("Press enter key to continue");
+        scan.nextLine();
+        
+        char[] wordArray = new char[randomWord.length()];       //array that stores each character from the random word (param: randomWord.length)
+        for (int i = 0; i < wordArray.length; i++) {            //updates wordArray to store the characters of 'word' (i < wordArray.length)
+            wordArray[i] = randomWord.charAt(i);
+            }
+
+        char[] wordHashes = new char[randomWord.length()];      //array wordHashes = randomWord.length
+        for (int i = 0; i < wordHashes.length; i++) {           // i < wordHashes.length
+            wordHashes[i] = '_';
+        } 
+
+        for (int i = 0; i < wordArray.length + 6; i++) {    
+            System.out.println(gallows[gallowIndex]); 
+
+            System.out.print("\nWord: ");
+        for (int j = 0; j < wordArray.length; j++) {            //finds word length and prints corresponding underscores
+            System.out.print(wordHashes[j] + " ");
+            }
+
+            System.out.print("\n\nMisses: ");                   //print misses
+            if (printMissedCounter > 0) {                       //if the 'printMissedCounter' is above zero it will begin to print the incorrect entries
+                for (int k = 0; k < misses.length; k++) {
+                    System.out.print(misses[k]);
+                }
+            } 
+
+            if (checkWin(wordHashes, wordArray) == true) {      //checkWin function called
+                System.out.println("\n\nYOU WON!!!!!");
+                System.exit(0);
+            } else if (checkLose(printMissedCounter)) {         //checkLose function called before user is given another guess
+                System.out.println("\nThe correct word was: " + randomWord);
+                System.out.println("\n\nYOU LOSE...");
+                System.exit(0);
+            }
+
+            System.out.print("\n\nGuess: ");    
+            char guess = scan.next().charAt(0);                 //guess = next char value
+            if (checkGuess(guess, wordArray) == true) {         //if checkGuess function returns true, update placeholder
+                updatePlaceholder(guess, wordArray, wordHashes);
+
+            } else if (checkGuess(guess, wordArray) == false) {
+                gallowIndex ++;                                  //add one to gallowIndex
+                misses[printMissedCounter] = guess;              //index 'printMissedCounter' of array 'misses' = guess when answer is incorrect
+                printMissedCounter ++;                           //add one to 'printMissedCounter' for next loop iteration
+            }
+            
+             
+            }
+        
+scan.close();
+
+
+}
+
+    public static String randomWord (String[] words) {            //generates random word from 'words' array
+    int i = (int)(Math.random() * words.length);   
+    return words[i];
+    }
+
+    public static void updatePlaceholder(char guess, char[] wordArray, char[] wordHashes) { //updates the 'wordHash' placeholder when a user entry is correct
+        for (int i = 0; i < wordArray.length; i++) {
+                if (guess == wordArray[i]) {
+                    wordHashes[i] = guess;
+                }
+        }
+    }
+
+    public static boolean checkGuess(char guess, char[] wordArray) {    //boolean loops through new and saved guesses and compares to word
+        int A = 0;                                                      //returns true if guess == any value in the 'word' array
+        for (int i = 0; i < wordArray.length; i++) {
+                if (guess == wordArray[i]) {
+                    A ++;
+                    break;
+                } 
+        }        
+            return (A > 0);
+    }
+
+    public static boolean checkWin(char[] wordHashes, char[] wordArray) {   //compares 'wordHashes' to 'wordArray' to check for equality
+        return (Arrays.equals(wordHashes, wordArray));
+            
+    }
+    public static boolean checkLose(int printMissedCounter) {
+        return printMissedCounter == 6;
+    }
+
+}
